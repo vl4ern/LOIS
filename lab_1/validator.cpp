@@ -77,7 +77,7 @@ bool parseFormula(const char formula[], int& position, char errorMessage[]) {
     position++;
 
     // Случай отрицания: (-F)
-    if (formula[position] == '-') {
+    if (formula[position] == '!') {
         position++;
 
         if (!parseFormula(formula, position, errorMessage)) {

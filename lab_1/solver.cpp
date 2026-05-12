@@ -111,7 +111,7 @@ bool evaluateFormula(
     position++;
 
     // Случай отрицания: (-F)
-    if (formula[position] == '-') {
+    if (formula[position] == '!') {
         position++;
 
         int innerResult = 0;

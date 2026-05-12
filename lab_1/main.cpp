@@ -28,7 +28,7 @@ void printHelp() {
     cout << "A" << endl;
     cout << "0" << endl;
     cout << "1" << endl;
-    cout << "(-A)" << endl;
+    cout << "(!A)" << endl;
     cout << "(A/\\B)" << endl;
     cout << "(A\\/B)" << endl;
     cout << "(A->B)" << endl;

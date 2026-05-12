@@ -24,7 +24,7 @@ bool isConstant(char symbol) {
 }
 
 bool isServiceSymbol(char symbol) {
-    return symbol == '(' || symbol == ')' || symbol == '-' ||
+    return symbol == '(' || symbol == ')' || symbol == '!' ||
            symbol == '/' || symbol == '\\' || symbol == '>' ||
            symbol == '~';
 }
