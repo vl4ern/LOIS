@@ -17,7 +17,7 @@
 #include "formula.h"
 
 // Вычисляет значение формулы при заданных значениях переменных.
-bool evaluateFormula(
+bool evaluate_formula(
     const char formula[],
     int& position,
     const char variables[],
@@ -27,7 +27,7 @@ bool evaluateFormula(
 );
 
 // Строит таблицу истинности и проверяет логическое следование.
-bool checkEntailment(
+bool check_following(
     const char formulaF[],
     const char formulaG[],
     const char variables[],

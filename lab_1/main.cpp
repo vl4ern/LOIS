@@ -23,26 +23,12 @@ using namespace std;
 
 
 // Выводит подсказку по синтаксису формул.
-void printHelp() {
-    cout << "Допустимый синтаксис формул:" << endl;
-    cout << "A" << endl;
-    cout << "0" << endl;
-    cout << "1" << endl;
-    cout << "(!A)" << endl;
-    cout << "(A/\\B)" << endl;
-    cout << "(A\\/B)" << endl;
-    cout << "(A->B)" << endl;
-    cout << "(A~B)" << endl;
-    cout << "((A/\\B)->C)" << endl;
-    cout << endl;
-    cout << "Важно: используются только большие латинские буквы A-Z." << endl;
-    cout << "Пробелы в формулах не используются." << endl;
-    cout << endl;
+void print_help() {
 }
 
 // Считывает корректную формулу.
 // Если пользователь ошибся, программа не завершается, а просит повторить ввод.
-void readValidFormula(char formula[], const char formulaName[]) {
+void read_valid_formula(char formula[], const char formulaName[]) {
     char errorMessage[MAX_ERROR_LENGTH];
     bool isCorrect = false;
 
@@ -50,7 +36,7 @@ void readValidFormula(char formula[], const char formulaName[]) {
         cout << "Введите формулу " << formulaName << ": ";
         cin.getline(formula, MAX_FORMULA_LENGTH);
 
-        if (validateFormula(formula, errorMessage)) {
+        if (validate_formula(formula, errorMessage)) {
             isCorrect = true;
         } else {
             cout << "Ошибка в формуле " << formulaName << ": "
@@ -62,7 +48,7 @@ void readValidFormula(char formula[], const char formulaName[]) {
 }
 
 // Запрашивает у пользователя желание продолжить работу.
-bool askContinue() {
+bool ask_continue() {
     char answer;
 
     cout << endl;
@@ -80,7 +66,7 @@ int main() {
     cout << "Проверка логического следования F |= G." << endl;
     cout << endl;
 
-    printHelp();
+    print_help();
 
     while (isRunning) {
         char formulaF[MAX_FORMULA_LENGTH];
@@ -89,19 +75,19 @@ int main() {
         char variables[MAX_VARIABLES];
         int variableCount = 0;
 
-        readValidFormula(formulaF, "F");
-        readValidFormula(formulaG, "G");
+        read_valid_formula(formulaF, "F");
+        read_valid_formula(formulaG, "G");
 
-        if (!collectVariables(formulaF, formulaG, variables, variableCount)) {
+        if (!collect_variables(formulaF, formulaG, variables, variableCount)) {
             cout << "Ошибка: в формулах слишком много переменных." << endl;
             cout << "Максимальное количество переменных: "
                  << MAX_VARIABLES << endl;
         } else {
             cout << endl;
-            checkEntailment(formulaF, formulaG, variables, variableCount);
+            check_following(formulaF, formulaG, variables, variableCount);
         }
 
-        isRunning = askContinue();
+        isRunning = ask_continue();
 
         cout << endl;
     }

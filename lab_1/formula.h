@@ -21,27 +21,27 @@ const int MAX_ERROR_LENGTH = 256;
 
 // Проверяет, является ли символ пропозициональной переменной.
 // В данной лабораторной используются только большие латинские буквы: A-Z.
-bool isVariable(char symbol);
+bool is_variable(char symbol);
 
 // Проверяет, является ли символ логической константой.
-bool isConstant(char symbol);
+bool is_constant(char symbol);
 
 // Проверяет, является ли символ допустимым служебным символом языка.
-bool isServiceSymbol(char symbol);
+bool is_service_symbol(char symbol);
 
 // Проверяет, начинается ли с текущей позиции бинарная связка.
-bool isBinaryOperatorAt(const char formula[], int position);
+bool is_binary_operator(const char formula[], int position);
 
 // Возвращает длину оператора, который начинается с текущей позиции.
 // Для /\ , \/ , -> длина равна 2.
 // Для ~ длина равна 1.
-int getOperatorLength(const char formula[], int position);
+int get_operator_length(const char formula[], int position);
 
 // Добавляет переменную в массив, если её там ещё нет.
-bool addVariable(char variables[], int& variableCount, char variable);
+bool add_variable(char variables[], int& variableCount, char variable);
 
 // Собирает все переменные из двух формул.
-bool collectVariables(
+bool collect_variables(
     const char formulaF[],
     const char formulaG[],
     char variables[],
@@ -49,12 +49,12 @@ bool collectVariables(
 );
 
 // Возвращает индекс переменной в массиве variables.
-int getVariableIndex(const char variables[], int variableCount, char variable);
+int get_variable_index(const char variables[], int variableCount, char variable);
 
 // Копирует одну C-строку в другую.
-void copyText(char target[], const char source[]);
+void copy_text(char target[], const char source[]);
 
 // Возвращает длину C-строки.
-int getTextLength(const char text[]);
+int get_text_length(const char text[]);
 
 #endif

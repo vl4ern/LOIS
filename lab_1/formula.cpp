@@ -15,21 +15,21 @@
 
 #include "formula.h"
 
-bool isVariable(char symbol) {
+bool is_variable(char symbol) {
     return symbol >= 'A' && symbol <= 'Z';
 }
 
-bool isConstant(char symbol) {
+bool is_constant(char symbol) {
     return symbol == '0' || symbol == '1';
 }
 
-bool isServiceSymbol(char symbol) {
+bool is_service_symbol(char symbol) {
     return symbol == '(' || symbol == ')' || symbol == '!' ||
-           symbol == '/' || symbol == '\\' || symbol == '>' ||
-           symbol == '~';
+           symbol == '/' || symbol == '\\' || symbol == '-' ||
+           symbol == '>' || symbol == '~';
 }
 
-bool isBinaryOperatorAt(const char formula[], int position) {
+bool is_binary_operator(const char formula[], int position) {
     if (formula[position] == '/' && formula[position + 1] == '\\') {
         return true;
     }
@@ -49,19 +49,19 @@ bool isBinaryOperatorAt(const char formula[], int position) {
     return false;
 }
 
-int getOperatorLength(const char formula[], int position) {
+int get_operator_length(const char formula[], int position) {
     if (formula[position] == '~') {
         return 1;
     }
 
-    if (isBinaryOperatorAt(formula, position)) {
+    if (is_binary_operator(formula, position)) {
         return 2;
     }
 
     return 0;
 }
 
-bool addVariable(char variables[], int& variableCount, char variable) {
+bool add_variable(char variables[], int& variableCount, char variable) {
     for (int i = 0; i < variableCount; i++) {
         if (variables[i] == variable) {
             return true;
@@ -78,7 +78,7 @@ bool addVariable(char variables[], int& variableCount, char variable) {
     return true;
 }
 
-bool collectVariables(
+bool collect_variables(
     const char formulaF[],
     const char formulaG[],
     char variables[],
@@ -87,16 +87,16 @@ bool collectVariables(
     variableCount = 0;
 
     for (int i = 0; formulaF[i] != '\0'; i++) {
-        if (isVariable(formulaF[i])) {
-            if (!addVariable(variables, variableCount, formulaF[i])) {
+        if (is_variable(formulaF[i])) {
+            if (!add_variable(variables, variableCount, formulaF[i])) {
                 return false;
             }
         }
     }
 
     for (int i = 0; formulaG[i] != '\0'; i++) {
-        if (isVariable(formulaG[i])) {
-            if (!addVariable(variables, variableCount, formulaG[i])) {
+        if (is_variable(formulaG[i])) {
+            if (!add_variable(variables, variableCount, formulaG[i])) {
                 return false;
             }
         }
@@ -105,7 +105,7 @@ bool collectVariables(
     return true;
 }
 
-int getVariableIndex(const char variables[], int variableCount, char variable) {
+int get_variable_index(const char variables[], int variableCount, char variable) {
     for (int i = 0; i < variableCount; i++) {
         if (variables[i] == variable) {
             return i;
@@ -115,7 +115,7 @@ int getVariableIndex(const char variables[], int variableCount, char variable) {
     return -1;
 }
 
-void copyText(char target[], const char source[]) {
+void copy_text(char target[], const char source[]) {
     int i = 0;
 
     while (source[i] != '\0') {
@@ -126,7 +126,7 @@ void copyText(char target[], const char source[]) {
     target[i] = '\0';
 }
 
-int getTextLength(const char text[]) {
+int get_text_length(const char text[]) {
     int length = 0;
 
     while (text[length] != '\0') {

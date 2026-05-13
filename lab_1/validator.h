@@ -18,6 +18,6 @@
 
 // Проверяет формулу на корректность.
 // Если формула некорректна, записывает причину ошибки в errorMessage.
-bool validateFormula(const char formula[], char errorMessage[]);
+bool validate_formula(const char formula[], char errorMessage[]);
 
 #endif

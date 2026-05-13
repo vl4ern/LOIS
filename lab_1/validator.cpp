@@ -15,23 +15,23 @@
 #include "validator.h"
 
 // Проверяет, что символ вообще принадлежит алфавиту языка.
-bool isAllowedSymbol(char symbol) {
-    return isVariable(symbol) ||
-           isConstant(symbol) ||
-           isServiceSymbol(symbol);
+bool is_allowed_symbol(char symbol) {
+    return is_variable(symbol) ||
+           is_constant(symbol) ||
+           is_service_symbol(symbol);
 }
 
 // Проверяет, что строка не пустая и не слишком длинная.
-bool validateBasicText(const char formula[], char errorMessage[]) {
-    int length = getTextLength(formula);
+bool validate_basic_text(const char formula[], char errorMessage[]) {
+    int length = get_text_length(formula);
 
     if (length == 0) {
-        copyText(errorMessage, "формула не должна быть пустой");
+        copy_text(errorMessage, "формула не должна быть пустой");
         return false;
     }
 
     if (length >= MAX_FORMULA_LENGTH - 1) {
-        copyText(errorMessage, "формула слишком длинная");
+        copy_text(errorMessage, "формула слишком длинная");
         return false;
     }
 
@@ -39,10 +39,10 @@ bool validateBasicText(const char formula[], char errorMessage[]) {
 }
 
 // Проверяет, что в формуле нет символов вне алфавита.
-bool validateAlphabet(const char formula[], char errorMessage[]) {
+bool validate_alphabet(const char formula[], char errorMessage[]) {
     for (int i = 0; formula[i] != '\0'; i++) {
-        if (!isAllowedSymbol(formula[i])) {
-            copyText(errorMessage, "формула содержит символ вне алфавита");
+        if (!is_allowed_symbol(formula[i])) {
+            copy_text(errorMessage, "формула содержит символ вне алфавита");
             return false;
         }
     }
@@ -52,24 +52,24 @@ bool validateAlphabet(const char formula[], char errorMessage[]) {
 
 // Рекурсивно разбирает формулу, начиная с позиции position.
 // После успешного разбора position указывает на первый символ после формулы.
-bool parseFormula(const char formula[], int& position, char errorMessage[]) {
+bool parse_formula(const char formula[], int& position, char errorMessage[]) {
     char current = formula[position];
 
     // Если дошли до конца строки, а формулу ещё ждали — это ошибка.
     if (current == '\0') {
-        copyText(errorMessage, "неожиданный конец формулы");
+        copy_text(errorMessage, "неожиданный конец формулы");
         return false;
     }
 
     // Атомарная формула: переменная или логическая константа.
-    if (isVariable(current) || isConstant(current)) {
+    if (is_variable(current) || is_constant(current)) {
         position++;
         return true;
     }
 
     // Любая сложная формула должна начинаться с открывающей скобки.
     if (current != '(') {
-        copyText(errorMessage, "ожидалась переменная, константа или открывающая скобка");
+        copy_text(errorMessage, "ожидалась переменная, константа или открывающая скобка");
         return false;
     }
 
@@ -80,12 +80,12 @@ bool parseFormula(const char formula[], int& position, char errorMessage[]) {
     if (formula[position] == '!') {
         position++;
 
-        if (!parseFormula(formula, position, errorMessage)) {
+        if (!parse_formula(formula, position, errorMessage)) {
             return false;
         }
 
         if (formula[position] != ')') {
-            copyText(errorMessage, "после отрицания ожидалась закрывающая скобка");
+            copy_text(errorMessage, "после отрицания ожидалась закрывающая скобка");
             return false;
         }
 
@@ -94,24 +94,24 @@ bool parseFormula(const char formula[], int& position, char errorMessage[]) {
     }
 
     // Случай бинарной формулы: (F op G)
-    if (!parseFormula(formula, position, errorMessage)) {
+    if (!parse_formula(formula, position, errorMessage)) {
         return false;
     }
 
-    if (!isBinaryOperatorAt(formula, position)) {
-        copyText(errorMessage, "ожидалась бинарная логическая связка");
+    if (!is_binary_operator(formula, position)) {
+        copy_text(errorMessage, "ожидалась бинарная логическая связка");
         return false;
     }
 
-    int operatorLength = getOperatorLength(formula, position);
+    int operatorLength = get_operator_length(formula, position);
     position += operatorLength;
 
-    if (!parseFormula(formula, position, errorMessage)) {
+    if (!parse_formula(formula, position, errorMessage)) {
         return false;
     }
 
     if (formula[position] != ')') {
-        copyText(errorMessage, "ожидалась закрывающая скобка");
+        copy_text(errorMessage, "ожидалась закрывающая скобка");
         return false;
     }
 
@@ -119,24 +119,24 @@ bool parseFormula(const char formula[], int& position, char errorMessage[]) {
     return true;
 }
 
-bool validateFormula(const char formula[], char errorMessage[]) {
-    if (!validateBasicText(formula, errorMessage)) {
+bool validate_formula(const char formula[], char errorMessage[]) {
+    if (!validate_basic_text(formula, errorMessage)) {
         return false;
     }
 
-    if (!validateAlphabet(formula, errorMessage)) {
+    if (!validate_alphabet(formula, errorMessage)) {
         return false;
     }
 
     int position = 0;
 
-    if (!parseFormula(formula, position, errorMessage)) {
+    if (!parse_formula(formula, position, errorMessage)) {
         return false;
     }
 
     // После разбора корректной формулы не должно оставаться лишних символов.
     if (formula[position] != '\0') {
-        copyText(errorMessage, "после конца формулы найдены лишние символы");
+        copy_text(errorMessage, "после конца формулы найдены лишние символы");
         return false;
     }
 

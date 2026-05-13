@@ -19,7 +19,7 @@
 using namespace std;
 
 // Применяет бинарную логическую операцию.
-int applyBinaryOperator(char firstSymbol, char secondSymbol, int left, int right) {
+int use_binary_operator(char firstSymbol, char secondSymbol, int left, int right) {
     // Конъюнкция: (/\)
     if (firstSymbol == '/' && secondSymbol == '\\') {
         return left && right;
@@ -46,14 +46,14 @@ int applyBinaryOperator(char firstSymbol, char secondSymbol, int left, int right
 }
 
 // Выводит значения переменных в одной строке таблицы.
-void printVariableValues(const int values[], int variableCount) {
+void print_variable_values(const int values[], int variableCount) {
     for (int i = 0; i < variableCount; i++) {
         cout << values[i] << " ";
     }
 }
 
 // Выводит конкретный контрпример, при котором следование нарушается.
-void printCounterexample(
+void print_counterexample(
     const char variables[],
     const int values[],
     int variableCount
@@ -73,7 +73,7 @@ void printCounterexample(
 
 // Рекурсивно вычисляет значение формулы.
 // position после вычисления указывает на первый символ после разобранной формулы.
-bool evaluateFormula(
+bool evaluate_formula(
     const char formula[],
     int& position,
     const char variables[],
@@ -84,15 +84,15 @@ bool evaluateFormula(
     char current = formula[position];
 
     // Логическая константа 0 или 1.
-    if (isConstant(current)) {
+    if (is_constant(current)) {
         result = current - '0';
         position++;
         return true;
     }
 
     // Пропозициональная переменная.
-    if (isVariable(current)) {
-        int index = getVariableIndex(variables, variableCount, current);
+    if (is_variable(current)) {
+        int index = get_variable_index(variables, variableCount, current);
 
         if (index == -1) {
             return false;
@@ -116,7 +116,7 @@ bool evaluateFormula(
 
         int innerResult = 0;
 
-        if (!evaluateFormula(formula, position, variables, values, variableCount, innerResult)) {
+        if (!evaluate_formula(formula, position, variables, values, variableCount, innerResult)) {
             return false;
         }
 
@@ -133,14 +133,14 @@ bool evaluateFormula(
     int leftResult = 0;
     int rightResult = 0;
 
-    if (!evaluateFormula(formula, position, variables, values, variableCount, leftResult)) {
+    if (!evaluate_formula(formula, position, variables, values, variableCount, leftResult)) {
         return false;
     }
 
     char firstOperatorSymbol = formula[position];
     char secondOperatorSymbol = '\0';
 
-    int operatorLength = getOperatorLength(formula, position);
+    int operatorLength = get_operator_length(formula, position);
 
     if (operatorLength == 0) {
         return false;
@@ -152,7 +152,7 @@ bool evaluateFormula(
 
     position += operatorLength;
 
-    if (!evaluateFormula(formula, position, variables, values, variableCount, rightResult)) {
+    if (!evaluate_formula(formula, position, variables, values, variableCount, rightResult)) {
         return false;
     }
 
@@ -162,7 +162,7 @@ bool evaluateFormula(
 
     position++;
 
-    result = applyBinaryOperator(
+    result = use_binary_operator(
         firstOperatorSymbol,
         secondOperatorSymbol,
         leftResult,
@@ -173,7 +173,7 @@ bool evaluateFormula(
 }
 
 // Заполняет массив значений переменных по номеру строки таблицы истинности.
-void fillValuesByRowNumber(int rowNumber, int values[], int variableCount) {
+void fill_values_by_row_number(int rowNumber, int values[], int variableCount) {
     for (int i = variableCount - 1; i >= 0; i--) {
         values[i] = rowNumber % 2;
         rowNumber = rowNumber / 2;
@@ -181,7 +181,7 @@ void fillValuesByRowNumber(int rowNumber, int values[], int variableCount) {
 }
 
 // Печатает заголовок таблицы истинности.
-void printTableHeader(const char variables[], int variableCount) {
+void print_table_header(const char variables[], int variableCount) {
     for (int i = 0; i < variableCount; i++) {
         cout << variables[i] << " ";
     }
@@ -196,7 +196,7 @@ void printTableHeader(const char variables[], int variableCount) {
 }
 
 // Строит таблицу истинности и проверяет следование G из F.
-bool checkEntailment(
+bool check_following(
     const char formulaF[],
     const char formulaG[],
     const char variables[],
@@ -213,10 +213,10 @@ bool checkEntailment(
     bool counterexampleFound = false;
     int counterexampleValues[MAX_VARIABLES];
 
-    printTableHeader(variables, variableCount);
+    print_table_header(variables, variableCount);
 
     for (int row = 0; row < rowCount; row++) {
-        fillValuesByRowNumber(row, values, variableCount);
+        fill_values_by_row_number(row, values, variableCount);
 
         int positionF = 0;
         int positionG = 0;
@@ -224,7 +224,7 @@ bool checkEntailment(
         int resultF = 0;
         int resultG = 0;
 
-        bool correctF = evaluateFormula(
+        bool correctF = evaluate_formula(
             formulaF,
             positionF,
             variables,
@@ -233,7 +233,7 @@ bool checkEntailment(
             resultF
         );
 
-        bool correctG = evaluateFormula(
+        bool correctG = evaluate_formula(
             formulaG,
             positionG,
             variables,
@@ -249,7 +249,7 @@ bool checkEntailment(
 
         int implicationResult = (!resultF) || resultG;
 
-        printVariableValues(values, variableCount);
+        print_variable_values(values, variableCount);
         cout << "| " << resultF << " | " << resultG << " | " << implicationResult << endl;
 
         // Главное условие варианта 5:
@@ -273,7 +273,7 @@ bool checkEntailment(
         cout << "Вывод: формула G следует из формулы F." << endl;
     } else {
         cout << "Вывод: формула G не следует из формулы F." << endl;
-        printCounterexample(variables, counterexampleValues, variableCount);
+        print_counterexample(variables, counterexampleValues, variableCount);
     }
 
     return follows;
